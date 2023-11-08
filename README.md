@@ -49,6 +49,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
   - **Method**: createThread
     - **Description**: This method creates a thread in OpenAI API.
 
+  - **Method**: deleteThread
+    - **Description**: This method delete a thread from threadId
+
   - **Method**: createMessage
     - **Description**: This method creates a message in OpenAI API.
 
@@ -58,6 +61,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
   - **Method**: retrieve
     - **Description**: This method retrieves a runner in OpenAI API.
 
+  - **Method**: getMessages
+    - **Description**: This method retrieves messages from threadId.
+    
 
 ----
 **API Logic:**
@@ -72,11 +78,18 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
   - Path: POST pages/api/thread.ts
         - Method: createThread
             - Description: This method creates a thread in OpenAI API.
+  
+  - Path: DELETE pages/api/thread.ts
+        - Method: deleteThread
+            - Description: This method delete a thread from threadId in OpenAI API.
 
   - Path: POST pages/api/chat.ts
-        - Method: createMessage, runner, retrieve, longPollingCall
-            - Description: This method creates a message in OpenAI API. Then it creates a runner and waits for the runner to be completed. It's neccesary to pass threadId and text instructions and assistantId parameters are optional.
+        - Method: createMessage, runner, retrieve, longPollingCall, getMessages
+            - Description: This method creates a message in OpenAI API. Then it creates a runner and waits for the runner to be completed. It's neccesary to pass threadId, assistantId and text parameters. instructions parameter is optional.
 
+  - Path: POST pages/api/messages.ts
+        - Method: getMessages
+            - Description: This method returns messages from threadId
 
 ## NextJs Docs
 

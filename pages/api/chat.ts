@@ -22,8 +22,7 @@ export default function handler(
     return
   } else {
     
-    const { threadId, text, instructions, assistant } = req.body
-
+    const { threadId, text, instructions, assistantId } = req.body
     const longPollingCall = (threadId: string, runnerId: string) => {
       let loonPolling = 10;
       return new Promise((resolve, reject) => {
@@ -45,14 +44,25 @@ export default function handler(
 
 
     OpenAIApi.createMessage(threadId, text).then((message) => {
-      OpenAIApi.runner(threadId,instructions,assistant).then((runner) => {
+      OpenAIApi.runner(threadId,assistantId,instructions).then((runner) => {
         longPollingCall(threadId, runner.id).then((runner) => {
-          res.status(200).json({ data: runner });
+          OpenAIApi.getMessages(threadId).then((messages) => {
+            res.status(200).json({ data: messages });
+          }).catch((error) => {
+            console.log(error);
+            res.status(500).json({ error: error });
+          })
         }).catch((error) => {
           console.log(error);
-          res.status(500).json({ error: error });
+          res.status(501).json({ error: error });
         })
+      }).catch((error) => {
+        console.log(error);
+        res.status(502).json({ error: error });
       })
+    }).catch((error) => {
+      console.log(error);
+      res.status(503).json({ error: error });
     })
 
   }

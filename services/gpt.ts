@@ -53,6 +53,10 @@ class OpenAIApi {
     return this.openai.beta.threads.create({})
   }
 
+  deleteThread(threadId: string) {
+    return this.openai.beta.threads.del(threadId)
+  }
+
   createMessage(threadId: string, message: string) {
     return this.openai.beta.threads.messages.create(threadId, {
       role: "user",
@@ -61,15 +65,20 @@ class OpenAIApi {
 
   }
 
-  runner(threadId: string, instructions?: string, assistantId?: string) {
-    const body: any = {}
+  runner(threadId: string, assistantId: string, instructions?: string) {
+    const body: OpenAI.Beta.Threads.Runs.RunCreateParams = {
+      assistant_id: assistantId
+    }
     if (instructions) body["instructions"] = instructions
-    if (assistantId) body["assistant_id"] = assistantId
     return this.openai.beta.threads.runs.create(threadId, body)
   }
 
   retrieve(threadId: string, runId: string) {
     return this.openai.beta.threads.runs.retrieve(threadId, runId)
+  }
+
+  getMessages(threadId:string) {
+    return this.openai.beta.threads.messages.list(threadId)
   }
 
 }
