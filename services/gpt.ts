@@ -13,6 +13,7 @@ class OpenAIApi {
   axios: AxiosInstance;
   openai: OpenAI;
   model: string = "gpt-4-1106-preview"
+  modelEmbedding: string = "text-embedding-ada-002"
 
   constructor() {
     if ((global as globalType).OpenAIApiInstance) {
@@ -35,6 +36,10 @@ class OpenAIApi {
 
   setModel(model: string) {
     this.model = model;
+  }
+
+  setModelEmbeddings(modelEmbedding: string) {
+    this.modelEmbedding = modelEmbedding;
   }
 
   getModels() {
@@ -77,8 +82,19 @@ class OpenAIApi {
     return this.openai.beta.threads.runs.retrieve(threadId, runId)
   }
 
+  list(threadId: string) {
+    return this.openai.beta.threads.runs.list(threadId)
+  }
+
   getMessages(threadId:string) {
     return this.openai.beta.threads.messages.list(threadId)
+  }
+
+  createEmbedding(text: string | string[]) {
+    return this.openai.embeddings.create({
+        model: this.modelEmbedding,
+        input: text,
+    })
   }
 
 }
